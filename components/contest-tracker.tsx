@@ -125,6 +125,26 @@ export default function ContestTracker() {
           </select>
         </div>
       </div>
+       <footer className="mt-8 text-center text-sm text-gray-500">
+       ⭐ If you liked this app, please star the{' '}
+        <a
+          href="https://github.com/ashishpawar517/codechef-contest-tracker"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-500 hover:underline"
+        >
+          GitHub repo
+        </a>{' '}
+        or{' '}
+        <a
+          href="https://github.com/ashishpawar517/codechef-contest-tracker/issues"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-500 hover:underline"
+        >
+          report an issue
+        </a>.
+      </footer>
     </div>
   )
 }
