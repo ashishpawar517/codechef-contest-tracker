@@ -2,12 +2,8 @@
 <h1 align="center"> CodeChef Contest Tracker
   <p align="center">
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/42ec3679-b07a-44d2-8b9b-48c8d552e9e8/deploy-status)](https://app.netlify.com/sites/matrix-visualizer/deploys)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![React](https://img.shields.io/badge/React-18-blue.svg)](https://reactjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue.svg)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-38B2AC.svg)](https://tailwindcss.com/)
-[![Vite](https://img.shields.io/badge/Vite-5-646CFF.svg)](https://vitejs.dev/)
+
+[![Vercel](https://img.shields.io/badge/deployed%20on-Vercel-000000?logo=vercel)](https://codechef-contest-tracker.vercel.app)  [![Next.js](https://img.shields.io/badge/Next.js-13-black?logo=next.js)](https://nextjs.org)  [![TypeScript](https://img.shields.io/badge/TypeScript-4.9-blue?logo=typescript)](https://www.typescriptlang.org)  [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.3-blue?logo=tailwind-css)](https://tailwindcss.com)  [![Radix UI](https://img.shields.io/badge/Radix_UI-stable-3A0CA3?logo=radix-ui)](https://www.radix-ui.com)  [![lucide-react](https://img.shields.io/badge/lucide--react-0.258.0-lightgrey?logo=react)](https://lucide.dev)  [![pnpm](https://img.shields.io/badge/Package_Manager-pnpm-F69220?logo=pnpm)](https://pnpm.io)  
 
   </p>
  </h1>
