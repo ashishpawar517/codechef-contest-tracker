@@ -31,7 +31,7 @@ Built with React, TypeScript, Tailwind CSS, and Radix UI components.
 - lucide-react icons
 
 ## Live Demo
-Click here - 
+Click here - [Deployed on Vercel](https://codechef-contest-tracker.vercel.app/)
 
 ## Project Structure
 - app – Next.js app routes & global styles
