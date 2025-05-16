@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           # Ensure we can push back
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT_TOKEN }}
 
       - name: Bump MAX_CONTEST_NUMBER
         run: |
