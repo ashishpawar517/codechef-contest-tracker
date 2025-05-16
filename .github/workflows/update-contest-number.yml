@@ -20,13 +20,12 @@ jobs:
       - name: Bump MAX_CONTEST_NUMBER
         run: |
           FILE=lib/constants.js
-          # Extract the current number
-          CURRENT=$(grep -Po '(?<=MAX_CONTEST_NUMBER\s*=\s*)\d+' $FILE)
+          # Extract the current number using awk
+          CURRENT=$(awk -F '=' '/MAX_CONTEST_NUMBER/ {gsub(/ /, "", $2); print $2}' $FILE)
           NEXT=$((CURRENT + 1))
           echo "Updating MAX_CONTEST_NUMBER from $CURRENT to $NEXT"
           # Use sed to do an in-place replacement
-          sed -E -i "s/(MAX_CONTEST_NUMBER\s*=\s*)${CURRENT}/\1${NEXT}/" $FILE
-
+          sed -i "s/MAX_CONTEST_NUMBER *= *${CURRENT}/MAX_CONTEST_NUMBER = ${NEXT}/" $FILE
       - name: Commit bumped constant
         run: |
           git config user.name "github-actions[bot]"
