@@ -19,7 +19,7 @@ jobs:
 
       - name: Bump MAX_CONTEST_NUMBER
         run: |
-          FILE=lib/constants.js
+          FILE=lib/constants.ts
           # Extract the current number using awk
           CURRENT=$(awk -F '=' '/MAX_CONTEST_NUMBER/ {gsub(/ /, "", $2); print $2}' $FILE)
           NEXT=$((CURRENT + 1))
