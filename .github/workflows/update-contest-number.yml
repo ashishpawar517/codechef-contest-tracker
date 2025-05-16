@@ -1,0 +1,36 @@
+# .github/workflows/bump-contest-number.yml
+name: Bump MAX_CONTEST_NUMBER Weekly
+
+on:
+  schedule:
+    # Every Thursday at 00:00 UTC
+    - cron: '0 0 * * 4'
+  workflow_dispatch:
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v3
+        with:
+          # Ensure we can push back
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Bump MAX_CONTEST_NUMBER
+        run: |
+          FILE=lib/constants.js
+          # Extract the current number
+          CURRENT=$(grep -Po '(?<=MAX_CONTEST_NUMBER\s*=\s*)\d+' $FILE)
+          NEXT=$((CURRENT + 1))
+          echo "Updating MAX_CONTEST_NUMBER from $CURRENT to $NEXT"
+          # Use sed to do an in-place replacement
+          sed -E -i "s/(MAX_CONTEST_NUMBER\s*=\s*)${CURRENT}/\1${NEXT}/" $FILE
+
+      - name: Commit bumped constant
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add lib/constants.js
+          git diff --cached --quiet || \
+            (git commit -m "ci: bump MAX_CONTEST_NUMBER to $NEXT" && git push)
