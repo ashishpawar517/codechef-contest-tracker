@@ -43,7 +43,7 @@ export default function ContestTracker() {
       <header className="flex items-center justify-between mb-6 border-b pb-4">
         <div className="flex items-center gap-2">
           <div className="h-6 w-6 bg-gradient-to-r from-orange-500 to-red-500 rounded"></div>
-          <h1 className="text-xl font-bold text-gray-800">CodeChef Tracker</h1>
+          <h1 className="text-xl font-bold text-gray-800">CodeChef Contest Tracker</h1>
         </div>
         <nav className="hidden md:flex items-center gap-4">
         
