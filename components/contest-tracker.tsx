@@ -14,18 +14,36 @@ export default function ContestTracker() {
   const [selectedDivision, setSelectedDivision] = useState("D");
   const [isClient, setIsClient] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [totalPages, setTotalPages] = useState(Math.ceil(MAX_CONTEST_NUMBER / 10));
   const [loading, setLoading] = useState(true);
   const [contestsRange, setContestsRange] = useState({
     start: MAX_CONTEST_NUMBER,
     end: MAX_CONTEST_NUMBER - 9,
   });
 
+  // Load cached data on mount
   useEffect(() => {
     setIsClient(true);
-    const cachechDivision = localStorage.getItem("last-division");
-    if (cachechDivision) {
-      setSelectedDivision(cachechDivision);
+    
+    // Load cached division
+    const cachedDivision = localStorage.getItem("last-division");
+    if (cachedDivision) {
+      setSelectedDivision(cachedDivision);
+    }
+    
+    // Load cached page position
+    const cachedRangeStr = localStorage.getItem("last-contest-range");
+    if (cachedRangeStr) {
+      try {
+        const cachedRange = JSON.parse(cachedRangeStr);
+        setContestsRange(cachedRange);
+        
+        // Calculate the correct page number based on the range
+        const pageOffset = Math.floor((MAX_CONTEST_NUMBER - cachedRange.start) / 10) + 1;
+        setCurrentPage(pageOffset);
+      } catch (e) {
+        console.error("Error parsing cached contest range:", e);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -36,16 +54,49 @@ export default function ContestTracker() {
     localStorage.setItem("last-division", value);
   };
 
-  // const handleSearch = (e: React.FormEvent) => {
-  //   e.preventDefault()
-  //   // Implement search functionality
-  // }
-
   const handleRefresh = () => {
     setLoading(true);
     // Clear cache and refresh data
     localStorage.removeItem(`contests-${selectedDivision}`);
     // Refresh data
+  };
+
+  const handleNextPage = () => {
+    // Don't go below contest #1
+    if (contestsRange.end > 10) {
+      setLoading(true);
+      const newStart = contestsRange.start - 10;
+      const newEnd = contestsRange.end - 10;
+      const newRange = {
+        start: newStart,
+        end: newEnd,
+      };
+      
+      setContestsRange(newRange);
+      setCurrentPage(currentPage + 1);
+      
+      // Cache the new range
+      localStorage.setItem("last-contest-range", JSON.stringify(newRange));
+    }
+  };
+
+  const handlePreviousPage = () => {
+    // Don't go above MAX_CONTEST_NUMBER
+    if (contestsRange.start < MAX_CONTEST_NUMBER) {
+      setLoading(true);
+      const newStart = Math.min(contestsRange.start + 10, MAX_CONTEST_NUMBER);
+      const newEnd = Math.min(contestsRange.end + 10, newStart - 9);
+      const newRange = {
+        start: newStart,
+        end: newEnd,
+      };
+      
+      setContestsRange(newRange);
+      setCurrentPage(Math.max(currentPage - 1, 1));
+      
+      // Cache the new range
+      localStorage.setItem("last-contest-range", JSON.stringify(newRange));
+    }
   };
 
   return (
@@ -63,8 +114,9 @@ export default function ContestTracker() {
             variant="ghost"
             size="icon"
             className="text-gray-600 hover:text-gray-800"
+            onClick={handleRefresh}
           >
-            <RefreshCw size={18} onClick={handleRefresh} />
+            <RefreshCw size={18} />
           </Button>
         </div>
       </header>
@@ -123,10 +175,22 @@ export default function ContestTracker() {
 
       <div className="flex items-center justify-between mt-6">
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" className="border-gray-300">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="border-gray-300"
+            onClick={handlePreviousPage}
+            disabled={contestsRange.start >= MAX_CONTEST_NUMBER}
+          >
             Previous
           </Button>
-          <Button variant="outline" size="sm" className="border-gray-300">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="border-gray-300"
+            onClick={handleNextPage}
+            disabled={contestsRange.end <= 10}
+          >
             Next
           </Button>
           <span className="text-sm text-gray-600">
@@ -134,14 +198,10 @@ export default function ContestTracker() {
           </span>
         </div>
 
-        {/* <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-600">Per Page</span>
-          <select className="border bg-cyan-50 border-gray-300 rounded text-sm p-1">
-            <option>100</option>
-            <option>50</option>
-            <option>25</option>
-          </select>
-        </div> */}
+        {/* Display info about current range */}
+        <div className="text-sm text-gray-600">
+          Showing contests {contestsRange.end} to {contestsRange.start}
+        </div>
       </div>
       <footer className="mt-8 text-center text-sm text-gray-500">
         ⭐ If you liked this app, please star the{" "}

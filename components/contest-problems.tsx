@@ -202,7 +202,16 @@ export default function ContestProblems({
           {Object.entries(contests).map(([contestCode, problems], index) => (
             <tr key={contestCode}>
               <td>{index + 1}</td>
-              <td>{contestCode}</td>
+              <td>
+                <a
+                  href={`https://www.codechef.com/${contestCode}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 hover:underline"
+                >
+                  {contestCode}
+                </a>
+              </td>
               {/* Create cells for problems A through G */}
               {["A", "B", "C", "D", "E", "F", "G"].map((letter) => {
                 // Find a problem that matches this letter position
