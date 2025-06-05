@@ -21,11 +21,29 @@ export default function ContestTracker() {
     end: MAX_CONTEST_NUMBER - 9,
   });
 
+  // Load cached data on mount
   useEffect(() => {
     setIsClient(true);
+    
+    // Load cached division
     const cachedDivision = localStorage.getItem("last-division");
     if (cachedDivision) {
       setSelectedDivision(cachedDivision);
+    }
+    
+    // Load cached page position
+    const cachedRangeStr = localStorage.getItem("last-contest-range");
+    if (cachedRangeStr) {
+      try {
+        const cachedRange = JSON.parse(cachedRangeStr);
+        setContestsRange(cachedRange);
+        
+        // Calculate the correct page number based on the range
+        const pageOffset = Math.floor((MAX_CONTEST_NUMBER - cachedRange.start) / 10) + 1;
+        setCurrentPage(pageOffset);
+      } catch (e) {
+        console.error("Error parsing cached contest range:", e);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -49,11 +67,16 @@ export default function ContestTracker() {
       setLoading(true);
       const newStart = contestsRange.start - 10;
       const newEnd = contestsRange.end - 10;
-      setContestsRange({
+      const newRange = {
         start: newStart,
         end: newEnd,
-      });
+      };
+      
+      setContestsRange(newRange);
       setCurrentPage(currentPage + 1);
+      
+      // Cache the new range
+      localStorage.setItem("last-contest-range", JSON.stringify(newRange));
     }
   };
 
@@ -63,11 +86,16 @@ export default function ContestTracker() {
       setLoading(true);
       const newStart = Math.min(contestsRange.start + 10, MAX_CONTEST_NUMBER);
       const newEnd = Math.min(contestsRange.end + 10, newStart - 9);
-      setContestsRange({
+      const newRange = {
         start: newStart,
         end: newEnd,
-      });
+      };
+      
+      setContestsRange(newRange);
       setCurrentPage(Math.max(currentPage - 1, 1));
+      
+      // Cache the new range
+      localStorage.setItem("last-contest-range", JSON.stringify(newRange));
     }
   };
 
