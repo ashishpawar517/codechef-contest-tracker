@@ -14,7 +14,7 @@ Built with React, TypeScript, Tailwind CSS, and Radix UI components.
 
 ## Features
 - Browse contests by division (Div. 1, 2, 3, 4)
-- Search contests by name or ID
+<!-- - Search contests by name or ID -->
 - Pagination with configurable items per page
 - Cache invalidation & manual refresh
 - Responsive design with mobile support
