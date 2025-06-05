@@ -1,18 +1,18 @@
 "use client"
 
 import type React from "react"
-
-import { useState } from "react"
-import { Search, Filter, RefreshCw } from "lucide-react"
-import { Input } from "@/components/ui/input"
+import { useState, useEffect } from "react"
+import { RefreshCw } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import ContestProblems from "@/components/contest-problems"
 import { MAX_CONTEST_NUMBER } from "@/lib/constants"
 
+// Use lazy initialization to load the cached division value.
 export default function ContestTracker() {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [selectedDivision, setSelectedDivision] = useState("C") // Default to Div 3
+  // const [searchQuery, setSearchQuery] = useState("")
+  const [selectedDivision, setSelectedDivision] = useState("D")
+  const [isClient, setIsClient] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [loading, setLoading] = useState(true)
@@ -21,15 +21,26 @@ export default function ContestTracker() {
     end: MAX_CONTEST_NUMBER - 9,
   })
 
+  useEffect(() => {
+    setIsClient(true);
+    const cachechDivision = localStorage.getItem("last-division")
+    if(cachechDivision) {
+      setSelectedDivision(cachechDivision)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+
   const handleDivisionChange = (value: string) => {
     setSelectedDivision(value)
     setLoading(true)
+    localStorage.setItem("last-division", value)
   }
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Implement search functionality
-  }
+  // const handleSearch = (e: React.FormEvent) => {
+  //   e.preventDefault()
+  //   // Implement search functionality
+  // }
 
   const handleRefresh = () => {
     setLoading(true)
@@ -45,9 +56,7 @@ export default function ContestTracker() {
           <div className="h-6 w-6 bg-gradient-to-r from-orange-500 to-red-500 rounded"></div>
           <h1 className="text-xl font-bold text-gray-800">CodeChef Contest Tracker</h1>
         </div>
-        <nav className="hidden md:flex items-center gap-4">
-        
-        </nav>
+        <nav className="hidden md:flex items-center gap-4"></nav>
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon" className="text-gray-600 hover:text-gray-800">
             <RefreshCw size={18} onClick={handleRefresh} />
@@ -55,7 +64,7 @@ export default function ContestTracker() {
         </div>
       </header>
 
-      <div className="flex flex-col md:flex-row gap-4 mb-6 items-start md:items-center justify-between">
+      {/* <div className="flex flex-col md:flex-row gap-4 mb-6 items-start md:items-center justify-between">
         <form onSubmit={handleSearch} className="w-full md:w-auto">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
@@ -77,9 +86,9 @@ export default function ContestTracker() {
             <Filter size={18} />
           </Button>
         </div>
-      </div>
+      </div> */}
 
-      <Tabs defaultValue="C" onValueChange={handleDivisionChange} className="mb-6">
+      <Tabs value={selectedDivision} onValueChange={handleDivisionChange} className="mb-6">
         <TabsList className="bg-gray-100">
           <TabsTrigger value="A" className="data-[state=active]:bg-white">
             Div. 1
@@ -116,17 +125,17 @@ export default function ContestTracker() {
           </span>
         </div>
 
-        <div className="flex items-center gap-2">
+        {/* <div className="flex items-center gap-2">
           <span className="text-sm text-gray-600">Per Page</span>
-          <select className="border bg-cyan-50  border-gray-300 rounded text-sm p-1">
+          <select className="border bg-cyan-50 border-gray-300 rounded text-sm p-1">
             <option>100</option>
             <option>50</option>
             <option>25</option>
           </select>
-        </div>
+        </div> */}
       </div>
-       <footer className="mt-8 text-center text-sm text-gray-500">
-       ⭐ If you liked this app, please star the{' '}
+      <footer className="mt-8 text-center text-sm text-gray-500">
+        ⭐ If you liked this app, please star the{' '}
         <a
           href="https://github.com/ashishpawar517/codechef-contest-tracker"
           target="_blank"
