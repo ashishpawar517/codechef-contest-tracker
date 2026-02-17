@@ -5,9 +5,16 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const contestCode = searchParams.get("code");
 
+  // Validate contestCode: only allow alphanumeric, underscores and hyphens
   if (!contestCode) {
     return NextResponse.json(
       { error: "Contest code is required" },
+      { status: 400 },
+    );
+  }
+  if (!/^[A-Za-z0-9_-]+$/.test(contestCode)) {
+    return NextResponse.json(
+      { error: "Invalid contest code format" },
       { status: 400 },
     );
   }
