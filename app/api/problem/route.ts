@@ -11,6 +11,15 @@ export async function GET(request: NextRequest) {
     );
   }
 
+  // Allow only typical CodeChef problem codes: letters, digits, underscores, reasonable length
+  const problemCodePattern = /^[A-Z0-9_]{1,20}$/i;
+  if (!problemCodePattern.test(problemCode)) {
+    return NextResponse.json(
+      { error: "Invalid problem code" },
+      { status: 400 },
+    );
+  }
+
   try {
     const response = await fetch(
       `https://www.codechef.com/api/contests/PRACTICE/problems/${problemCode}`,
