@@ -1,1 +1,1 @@
-export const MAX_CONTEST_NUMBER = 244
+export const MAX_CONTEST_NUMBER = 245
